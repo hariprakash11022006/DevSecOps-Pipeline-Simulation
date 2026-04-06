@@ -1,11 +1,25 @@
 from flask import Flask
-import datetime
+import os
 
 app = Flask(__name__)
 
+COUNTER_FILE = "/tmp/deploy_count.txt"
+
+def get_deploy_number():
+    if os.path.exists(COUNTER_FILE):
+        with open(COUNTER_FILE, "r") as f:
+            count = int(f.read().strip())
+    else:
+        count = 0
+    count += 1
+    with open(COUNTER_FILE, "w") as f:
+        f.write(str(count))
+    return count
+
+DEPLOY_NUMBER = get_deploy_number()
+
 @app.route('/')
 def home():
-    deployment_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return f"""
     <!DOCTYPE html>
     <html>
@@ -39,18 +53,22 @@ def home():
                 display: inline-block;
                 margin: 10px 0;
             }}
-            .info {{ color: #89b4fa; margin-top: 20px; font-size: 0.95rem; }}
-            .time {{ color: #f38ba8; font-weight: bold; }}
+            .deploy-num {{
+                font-size: 4rem;
+                font-weight: bold;
+                color: #89b4fa;
+                margin: 20px 0;
+            }}
+            .info {{ color: #cdd6f4; font-size: 0.95rem; }}
         </style>
     </head>
     <body>
         <div class="card">
             <h1>✅ Deployment Successful</h1>
-            <div class="badge">SECURE</div>
-            <p>This build passed the ClamAV malware scan</p>
+            <div class="badge">SECURE — ClamAV Scan Passed</div>
+            <div class="deploy-num">#{DEPLOY_NUMBER}</div>
             <div class="info">
                 <p>Pipeline: <strong>GitHub → Jenkins → ClamAV → Docker</strong></p>
-                <p>Last Accessed: <span class="time">{deployment_time}</span></p>
             </div>
         </div>
     </body>

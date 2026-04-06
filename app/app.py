@@ -3,10 +3,9 @@ import datetime
 
 app = Flask(__name__)
 
-DEPLOYMENT_TIME = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
 @app.route('/')
 def home():
+    deployment_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return f"""
     <!DOCTYPE html>
     <html>
@@ -51,7 +50,7 @@ def home():
             <p>This build passed the ClamAV malware scan</p>
             <div class="info">
                 <p>Pipeline: <strong>GitHub → Jenkins → ClamAV → Docker</strong></p>
-                <p>Deployed at: <span class="time">{DEPLOYMENT_TIME}</span></p>
+                <p>Last Accessed: <span class="time">{deployment_time}</span></p>
             </div>
         </div>
     </body>

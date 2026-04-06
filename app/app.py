@@ -11,7 +11,7 @@ def home():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>DevSecOps Pipeline</title>
+        <title>DevSecOps Pipeline-2</title>
         <style>
             body {{
                 font-family: Arial, sans-serif;

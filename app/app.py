@@ -3,20 +3,7 @@ import os
 
 app = Flask(__name__)
 
-COUNTER_FILE = "/tmp/deploy_count.txt"
-
-def get_deploy_number():
-    if os.path.exists(COUNTER_FILE):
-        with open(COUNTER_FILE, "r") as f:
-            count = int(f.read().strip())
-    else:
-        count = 0
-    count += 1
-    with open(COUNTER_FILE, "w") as f:
-        f.write(str(count))
-    return count
-
-DEPLOY_NUMBER = get_deploy_number()
+BUILD_NUMBER = os.environ.get("BUILD_NUMBER", "1")
 
 @app.route('/')
 def home():
@@ -24,7 +11,7 @@ def home():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>DevSecOps Pipeline-Demo</title>
+        <title>DevSecOps Pipeline</title>
         <style>
             body {{
                 font-family: Arial, sans-serif;
@@ -66,7 +53,7 @@ def home():
         <div class="card">
             <h1>✅ Deployment Successful</h1>
             <div class="badge">SECURE — ClamAV Scan Passed</div>
-            <div class="deploy-num">#{DEPLOY_NUMBER}</div>
+            <div class="deploy-num">#{BUILD_NUMBER}</div>
             <div class="info">
                 <p>Pipeline: <strong>GitHub → Jenkins → ClamAV → Docker</strong></p>
             </div>

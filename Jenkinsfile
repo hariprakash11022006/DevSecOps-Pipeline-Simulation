@@ -41,7 +41,9 @@ pipeline {
                 sh '''
                     docker stop devsecops-app || true
                     docker rm devsecops-app || true
-                    docker run -d --name devsecops-app -p 5000:5000 devsecops-app
+                    docker run -d --name devsecops-app -p 5000:5000 \
+                        -e BUILD_NUMBER=$BUILD_NUMBER \
+                        devsecops-app
                 '''
             }
         }
